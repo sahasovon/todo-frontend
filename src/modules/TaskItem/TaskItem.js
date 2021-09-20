@@ -12,8 +12,7 @@ const TaskItem = () => (
       <div className="TaskItem__text flex-grow-1">
           <span>Text Text Text Text Text </span>
       </div>
-    <button>+</button>
-    <button>X</button>
+      <button className="btn TaskItem__button_cross"/>
   </div>
 );
 

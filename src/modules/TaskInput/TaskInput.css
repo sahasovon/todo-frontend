@@ -1,3 +1,27 @@
 .TaskInput {
+    display: flex;
+    flex-direction: row;
     margin-bottom: 1rem;
+}
+.TaskInput__input_div {
+    padding-right: 0.75rem;
+}
+.TaskInput__input {
+    height: 3rem;
+    margin-top: 0.5rem;
+    box-shadow: none;
+}
+.TaskInput__input[type="text"] {
+    background-color: #D6EAFF;
+}
+.TaskInput__button_add {
+    height: 3rem;
+    width: 3rem;
+    border: 1px solid #D6EAFF;
+    border-radius: 5px;
+    background-color: #D6EAFF;
+    background-image: url('../../images/icon-plus.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 0.5rem;
 }
