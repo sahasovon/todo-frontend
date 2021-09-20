@@ -1,1 +1,37 @@
 .Panel {}
+.Panel__button_group {
+    display: flex;
+    justify-content: flex-start;
+}
+.Panel__button {
+    background-color: #D6EAFF;
+    color: #1A1A1A;
+    margin-top: 1rem;
+    min-width: 6rem;
+    height: 3rem;
+    border: 0;
+    font-weight: 700;
+}
+.Panel__button:not(:first-child) {
+    margin-left: 1rem;
+}
+.Panel__button:hover,
+.Panel__button:focus,
+.Panel__button:active {
+    background-color: #D6EAFF;
+    color: #1A1A1A;
+}
+
+/* Portrait */
+@media only screen
+and (min-device-width: 375px)
+and (max-device-width: 667px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (orientation: portrait) {
+    .Panel__button_group {
+        flex-direction: column;
+    }
+    .Panel__button {
+        margin-left: 0 !important;
+    }
+}

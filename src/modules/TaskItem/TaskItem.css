@@ -1,0 +1,94 @@
+.TaskItem {
+    display: flex;
+    flex-direction: row;
+}
+/* Checkbox container */
+.TaskItem__checkbox {
+    display: block;
+    height: 49px;
+    width: 49px;
+    position: relative;
+    padding-left: 35px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.TaskItem__checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.TaskItem__checkbox__checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #707070;
+}
+
+/* On mouse-over, add a grey background color */
+.TaskItem__checkbox:hover input ~ .TaskItem__checkbox__checkmark {}
+
+/* When the checkbox is checked, add a blue background */
+.TaskItem__checkbox input:checked ~ .TaskItem__checkbox__checkmark {
+    background-color: #1178E2;
+    border: 1px solid #1178E2;
+    background-image: url('checkmark.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.TaskItem__checkbox__checkmark:after {
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.TaskItem__checkbox input:checked ~ .TaskItem__checkbox__checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.TaskItem__checkbox .TaskItem__checkbox__checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* Task Text */
+.TaskItem__text {
+    background: rgba(214, 234, 255, 0.3);
+    border-radius: 5px;
+    height: 3rem;
+    margin: 0.5rem;
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 0.6rem;
+    box-shadow: inset -7px 0 15px -7px rgba(247,251,255,0.4);
+}
+.TaskItem__text span {
+    overflow-x: hidden;
+    white-space: nowrap;
+}
