@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: 'roboto';
 }
 
 .App-logo {
@@ -20,7 +21,6 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
@@ -49,4 +49,31 @@
   font-size: 1.25rem;
   text-decoration: none;
   white-space: nowrap;
+}
+
+/* Spinner */
+.spinnerLoader {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  background-color: white;
+  opacity: 0.8;
+  z-index: 100;
+  color: #1178E2;
+}
+.spinnerLoader__svg {
+  animation: spin 1s linear infinite;
+}
+.spinnerLoader__text {
+  margin-top: 1em;
+  font-size: 20px;
+  line-height: 23px;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
