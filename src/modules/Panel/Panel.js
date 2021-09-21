@@ -1,24 +1,34 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useState} from 'react';
+// import PropTypes from 'prop-types';
 import './Panel.css';
 import TaskInput from "../TaskInput/TaskInput";
 import TaskItem from "../TaskItem/TaskItem";
 
 const Panel = ({stateChanger, ...rest}) => {
 
+  const [taskItems, updateTask] = useState([]);
+
   stateChanger(false);
+
+  const addTask = (task) => {
+      const updatedTasks = [
+          ...taskItems,
+          task
+      ];
+
+      updateTask(updatedTasks);
+  };
 
   return (
       <div className="Panel container">
           <div className="row">
               <div className="col"/>
               <div className="col-12 col-md-8">
-                  <TaskInput/>
+                  <TaskInput
+                    onAddTask={addTask}
+                  />
 
-                  <TaskItem/>
-                  <TaskItem/>
-                  <TaskItem/>
-                  <TaskItem/>
+                  {taskItems.map(tim => <TaskItem key={tim.id}/>)}
 
                   <div className="Panel__button_group">
                       <button className="btn btn-primary Panel__button">Save</button>
