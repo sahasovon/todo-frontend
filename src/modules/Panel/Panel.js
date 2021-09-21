@@ -142,7 +142,11 @@ async function loadTasksFromDb() {
         .then(response => {
             tasks = response.tasks;
 
-            tasks = tasks.map(t => t.is_new = false);
+            tasks = tasks.map(t => {
+                t['is_new'] = false
+
+                return t;
+            });
         })
         .catch(err => {
             console.log('Error', err);
