@@ -6,9 +6,10 @@ import TaskItem from "../TaskItem/TaskItem";
 
 const Panel = ({stateChanger, ...rest}) => {
 
-  const [taskItems, updateTask] = useState([]);
+  const [taskItems, updateTasks] = useState([]);
 
-  stateChanger(false);
+  const showSpinner = () => stateChanger(true);
+  const hideSpinner = () => stateChanger(false);
 
   const addTask = (task) => {
       const updatedTasks = [
@@ -16,8 +17,44 @@ const Panel = ({stateChanger, ...rest}) => {
           task
       ];
 
-      updateTask(updatedTasks);
+      updateTasks(updatedTasks);
   };
+
+  const updateTask = task => {
+      const updatedTasks = taskItems.map(t => (t.id === task.id) ? task : t);
+
+      updateTasks(updatedTasks);
+  }
+
+  const removedTask = task => {
+      const updatedTasks = taskItems.filter(t => t.id !== task.id);
+
+      updateTasks(updatedTasks);
+  }
+
+  const saveTasks = () => {
+      showSpinner();
+
+      saveTasksDb(taskItems)
+          .then(() => {
+              hideSpinner();
+          });
+  }
+
+  const loadTasks = () => {
+      showSpinner();
+
+      loadTasksFromDb()
+          .then(tasks => {
+              updateTasks(tasks);
+
+              hideSpinner();
+          });
+  }
+
+  const clearTasks = () => {
+      updateTasks([]);
+  }
 
   return (
       <div className="Panel container">
@@ -28,12 +65,21 @@ const Panel = ({stateChanger, ...rest}) => {
                     onAddTask={addTask}
                   />
 
-                  {taskItems.map(tim => <TaskItem key={tim.id}/>)}
+                  {
+                      taskItems.map(tim =>
+                        <TaskItem
+                            key={tim.id}
+                            task={tim}
+                            onRemoveTask={removedTask}
+                            onUpdateTask={updateTask}
+                        />
+                      )
+                  }
 
                   <div className="Panel__button_group">
-                      <button className="btn btn-primary Panel__button">Save</button>
-                      <button className="btn btn-primary Panel__button">Load</button>
-                      <button className="btn btn-primary Panel__button">Clear</button>
+                      <button className="btn btn-primary Panel__button" onClick={saveTasks}>Save</button>
+                      <button className="btn btn-primary Panel__button" onClick={loadTasks}>Load</button>
+                      <button className="btn btn-primary Panel__button" onClick={clearTasks}>Clear</button>
                   </div>
               </div>
               <div className="col"/>
@@ -41,6 +87,60 @@ const Panel = ({stateChanger, ...rest}) => {
       </div>
   )
 };
+
+async function saveTasksDb(taskItems) {
+    let tasks = [];
+
+    await fetch(process.env.REACT_APP_API_URL + '/tasks/save', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "tasks": taskItems
+        })
+    })
+        .then(res => {
+            if (res.status !== 200) {
+                throw Error('Some error occurred')
+            }
+
+            return res.json();
+        })
+        .then(response => {
+            tasks = response.tasks;
+        })
+        .catch(err => {
+            console.log('Error', err);
+        });
+
+    return tasks;
+}
+
+async function loadTasksFromDb() {
+    let tasks = [];
+
+    await fetch(process.env.REACT_APP_API_URL + '/tasks', {
+        method: 'GET',
+        credentials: 'include'
+    })
+        .then(res => {
+            if (res.status !== 200) {
+                throw Error('Some error occurred')
+            }
+
+            return res.json();
+        })
+        .then(response => {
+            tasks = response.tasks;
+        })
+        .catch(err => {
+            console.log('Error', err);
+        });
+
+    return tasks;
+}
 
 Panel.propTypes = {};
 

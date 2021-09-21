@@ -2,19 +2,28 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import './TaskItem.css';
 
-const TaskItem = () => (
-  <div className="TaskItem d-flex">
-      <label className="TaskItem__checkbox">
-          <input type="checkbox"/>
-          <span className="TaskItem__checkbox__checkmark"/>
-      </label>
+const TaskItem = ({task, onRemoveTask, onUpdateTask}) => {
+    const removeTask = () => {onRemoveTask(task)};
+    const updateTask = () => {
+        task.is_complete = !task.is_complete;
 
-      <div className="TaskItem__text flex-grow-1">
-          <span>Text Text Text Text Text </span>
-      </div>
-      <button className="btn TaskItem__button_cross"/>
-  </div>
-);
+        onUpdateTask(task)
+    };
+
+    return (
+        <div className="TaskItem d-flex">
+            <label className="TaskItem__checkbox">
+                <input type="checkbox" defaultChecked={task.is_complete} onClick={updateTask}/>
+                <span className="TaskItem__checkbox__checkmark"/>
+            </label>
+
+            <div className="TaskItem__text flex-grow-1">
+                <span>{task.task_name}</span>
+            </div>
+            <button className="btn TaskItem__button_cross" onClick={removeTask}/>
+        </div>
+    )
+};
 
 TaskItem.propTypes = {};
 
