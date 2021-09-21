@@ -53,7 +53,14 @@ const Panel = ({stateChanger, ...rest}) => {
   }
 
   const clearTasks = () => {
-      updateTasks([]);
+      showSpinner();
+
+      clearTasksFromDb()
+          .then(tasks => {
+              updateTasks(tasks);
+
+              hideSpinner();
+          });
   }
 
   return (
@@ -140,6 +147,25 @@ async function loadTasksFromDb() {
         });
 
     return tasks;
+}
+
+async function clearTasksFromDb() {
+    await fetch(process.env.REACT_APP_API_URL + '/tasks/clear', {
+        method: 'DELETE',
+        credentials: 'include'
+    })
+        .then(res => {
+            if (res.status !== 200) {
+                throw Error('Some error occurred')
+            }
+
+            return res.json();
+        })
+        .catch(err => {
+            console.log('Error', err);
+        });
+
+    return [];
 }
 
 Panel.propTypes = {};
