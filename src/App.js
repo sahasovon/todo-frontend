@@ -2,17 +2,23 @@ import React, {useState} from "react";
 import './App.css';
 import Spinner from "./modules/Spinner/Spinner";
 import Panel from "./modules/Panel/Panel";
+import { useCookies } from "react-cookie";
+
+let userToken;
 
 function App() {
     const [isLoading, setValue] = useState(false);
+    const [cookies, setCookie] = useCookies(["user_token"]);
     let spinner;
 
     if (isLoading) {
         spinner = <Spinner/>;
     }
 
-    if (localStorage.getItem("user_token") == null) {
-        getUserToken();
+    if (cookies["x-user-token"] == null) {
+        getUserToken().then(() => {
+            setCookie("x-user-token", userToken);
+        });
     }
 
     return (
@@ -32,8 +38,8 @@ function App() {
     );
 }
 
-function getUserToken() {
-    fetch(process.env.REACT_APP_API_URL + '/generate-token', {
+async function getUserToken() {
+    await fetch(process.env.REACT_APP_API_URL + '/generate-token', {
         method: 'POST'
     })
         .then(res => {
@@ -44,7 +50,7 @@ function getUserToken() {
             return res.json();
         })
         .then(response => {
-            localStorage.setItem("user_token", response.token);
+            userToken = response.token;
         })
         .catch(err => {
             console.log('Error', err);
