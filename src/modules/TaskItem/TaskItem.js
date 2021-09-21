@@ -10,6 +10,12 @@ const TaskItem = ({task, onRemoveTask, onUpdateTask}) => {
         onUpdateTask(task)
     };
 
+    if (task.is_new) {
+        setTimeout(() => {
+            removeTask();
+        }, 5*60*1000);
+    }
+
     return (
         <div className="TaskItem d-flex">
             <label className="TaskItem__checkbox">

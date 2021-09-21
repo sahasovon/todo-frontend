@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 // import PropTypes from 'prop-types';
 import './TaskInput.css';
+import {useCookies} from "react-cookie";
 
 const TaskInput = ({onAddTask}) => {
+    const [cookies] = useCookies(["user_token"]);
     const [taskName, setTaskName] = useState('');
 
     const handleChange = (event) => {
@@ -10,11 +12,20 @@ const TaskInput = ({onAddTask}) => {
     }
 
     const addTask = () => {
-        addTaskToDb(taskName).then(task => {
-            setTaskName("");
+        if (taskName === "") return;
 
-            onAddTask(task);
-        });
+        const task = {
+            id: Math.floor(Math.random() * 10000),
+            user_uuid: cookies["x-user-token"],
+            task_name: taskName,
+            created_at: new Date(),
+            updated_at: new Date(),
+            is_new: true
+        };
+
+        setTaskName("");
+
+        onAddTask(task);
     }
 
     return (
@@ -26,36 +37,6 @@ const TaskInput = ({onAddTask}) => {
         </div>
     )
 };
-
-async function addTaskToDb(taskName) {
-    let task;
-
-    await fetch(process.env.REACT_APP_API_URL + '/tasks', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "task_name": taskName
-        })
-    })
-        .then(res => {
-            if (res.status !== 200) {
-                throw Error('Some error occurred')
-            }
-
-            return res.json();
-        })
-        .then(response => {
-            task = response.task;
-        })
-        .catch(err => {
-            console.log('Error', err);
-        });
-
-    return task;
-}
 
 TaskInput.propTypes = {};
 
